@@ -1,0 +1,12 @@
+type hal_fod_lenovo, coredomain, domain;
+hal_server_domain(hal_fod_lenovo, hal_lineage_fod)
+
+type sysfs_fod, sysfs_type, fs_type;
+
+type hal_fod_lenovo_exec, exec_type, system_file_type, file_type;
+init_daemon_domain(hal_fod_lenovo)
+
+allow hal_fod_lenovo sysfs_fod:file rw_file_perms;
+allow hal_fod_lenovo sysfs_graphics:dir r_dir_perms;
+allow hal_fod_lenovo sysfs_graphics:file rw_file_perms;
+allow hal_fod_lenovo sysfs_dm:file rw_file_perms;
