@@ -4244,42 +4244,118 @@ case "$target" in
 	echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
 	# Setting b.L scheduler parameters
-	echo 95 95 > /proc/sys/kernel/sched_upmigrate
-	echo 85 85 > /proc/sys/kernel/sched_downmigrate
+	echo 90 85 > /proc/sys/kernel/sched_upmigrate
+	echo 90 60 > /proc/sys/kernel/sched_downmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
 	echo 100 > /proc/sys/kernel/sched_group_upmigrate
 	echo 10 > /proc/sys/kernel/sched_group_downmigrate
-	echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+	echo 0 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+	
+	# do not use lock_value(), libqti-perfd-client.so will fail to override it
+    echo "0" > /dev/stune/top-app/schedtune.sched_boost_enabled
+    echo "0" > /dev/stune/top-app/schedtune.boost
+    echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
 	# cpuset parameters
 	echo 0-3 > /dev/cpuset/background/cpus
 	echo 0-3 > /dev/cpuset/system-background/cpus
 
-	echo 0-6 > /dev/cpuset/foreground/cpus
+	echo 0-3 > /dev/cpuset/foreground/cpus
+	
+	change_task_cgroup "crtc_commit" "display" "cpuset"
+	
+	# avoid display preemption on big
+    lock_value "0-3" /dev/cpuset/display/cpus
 
 	# Turn off scheduler boost at the end
 	echo 0 > /proc/sys/kernel/sched_boost
 
+  # fix laggy bilibili feed scrolling
+    change_task_cgroup "servicemanager" "top-app" "cpuset"
+    change_task_cgroup "servicemanager" "top-app" "stune"
+    change_task_cgroup "android.phone" "top-app" "cpuset"
+    change_task_cgroup "android.phone" "top-app" "stune"
+
+    # fix laggy home gesture
+    change_task_cgroup "system_server" "top-app" "cpuset"
+    change_task_cgroup "system_server" "top-app" "stune"
+
+    # reduce render thread waiting time
+    change_task_cgroup "surfaceflinger" "top-app" "cpuset"
+    change_task_cgroup "surfaceflinger" "top-app" "stune"
+
+    # unify schedtune misc
+    lock_value "0" /dev/stune/background/schedtune.sched_boost_enabled
+    lock_value "1" /dev/stune/background/schedtune.sched_boost_no_override
+    lock_value "0" /dev/stune/background/schedtune.boost
+    lock_value "0" /dev/stune/background/schedtune.prefer_idle
+    lock_value "0" /dev/stune/foreground/schedtune.sched_boost_enabled
+    lock_value "1" /dev/stune/foreground/schedtune.sched_boost_no_override
+    lock_value "0" /dev/stune/foreground/schedtune.boost
+    lock_value "1" /dev/stune/foreground/schedtune.prefer_idle
+    lock_value "0" /dev/stune/top-app/schedtune.sched_boost_no_override
+
+    # CFQ io scheduler takes cgroup into consideration
+    lock_value "cfq" /sys/block/sda/queue/scheduler
+    # Flash doesn't have back seek problem, so penalty is as low as possible
+    lock_value "1" /sys/block/sda/queue/iosched/back_seek_penalty
+    # slice_idle = 0 means CFQ IOP mode, https://lore.kernel.org/patchwork/patch/944972/
+    lock_value "0" /sys/block/sda/queue/iosched/slice_idle
+    # UFS 2.0+ hardware queue depth is 32
+    lock_value "16" /sys/block/sda/queue/iosched/quantum
+    # lower read_ahead_kb to reduce random access overhead
+    lock_value "128" /sys/block/sda/queue/read_ahead_kb
+    
+    # turn off hotplug to reduce latency
+    lock_value "0" /sys/devices/system/cpu/cpu0/core_ctl/enable
+    # tend to online more cores to balance parallel tasks
+    echo "15" > /sys/devices/system/cpu/cpu4/core_ctl/busy_up_thres
+    echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/busy_down_thres
+    echo "100" > /sys/devices/system/cpu/cpu4/core_ctl/offline_delay_ms
+    echo "5" > /sys/devices/system/cpu/cpu4/core_ctl/task_thres
+    # task usually doesn't run on cpu7
+    echo "15" > /sys/devices/system/cpu/cpu7/core_ctl/busy_up_thres
+    echo "10" > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
+    echo "100" > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
+
+    # zram doesn't need much read ahead(random read)
+    echo "4" > /sys/block/zram0/queue/read_ahead_kb
+    
+    # unify scaling_min_freq, may be override
+    echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
+    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+
+    # unify scaling_max_freq, may be override
+    echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
+    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2419600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
+
+    # unify group_migrate
+	lock_value "120" /proc/sys/kernel/sched_group_upmigrate
+	lock_value "100" /proc/sys/kernel/sched_group_downmigrate
+
 	# configure governor settings for silver cluster
-	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
+	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
 	#echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
         #echo 200 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
 	#echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-	echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-	echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+	#echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
+	#echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
 
 	# configure governor settings for gold cluster
-	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
+	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
 	#echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/up_rate_limit_us
         #echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
 	#echo 1412800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-	echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
+	#echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
 
 	# configure governor settings for gold+ cluster
-	echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
+	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
 	#echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/up_rate_limit_us
         #echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
 	#echo 1412800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
-	echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
+	#echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
 
 	# configure input boost settings
 	# ifndef VENDOR_EDIT
@@ -4287,14 +4363,27 @@ case "$target" in
 	# echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 	# echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
 	# else VENDOR_EDIT
-	echo "0:1036000" > /sys/module/cpu_boost/parameters/input_boost_freq
-	echo 200 > /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "0:1036800 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
+    lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 	# endif VENDOR_EDIT
 
 	# ifdef VENDOR_EDIT
 	# simon.ma@SYSTEM, 2019/5/16, add for GCE-8382 to modify the minfree value of lmk
 	echo "18432,23040,27648,51256,150296,200640" > /sys/module/lowmemorykiller/parameters/minfree
 	# endif VENDOR_EDIT
+	
+	echo "16" > /proc/sys/kernel/sched_min_task_util_for_boost
+  echo "96" > /proc/sys/kernel/sched_min_task_util_for_colocation
+  echo "1000000" > /proc/sys/kernel/sched_little_cluster_coloc_fmin_khz
+  echo "0" > /proc/sys/kernel/sched_walt_rotate_big_tasks
+  
+  # limit the usage of big cluster
+    lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
+    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    # task usually doesn't run on cpu7
+    lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
+    echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
 
 	# Disable wsf, beacause we are using efk.
 	# wsf Range : 1..1000 So set to bare minimum value 1.
@@ -4478,8 +4567,15 @@ case "$target" in
 	echo 85 85 > /proc/sys/kernel/sched_downmigrate
 	echo 100 > /proc/sys/kernel/sched_group_upmigrate
 	echo 85 > /proc/sys/kernel/sched_group_downmigrate
-	echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
+	#echo 1 > /proc/sys/kernel/sched_walt_rotate_big_tasks
 	echo 400000000 > /proc/sys/kernel/sched_coloc_downmigrate_ns
+	
+	# move all top-app to foreground to reduce nr_top_app
+    for ttask in `cat /dev/cpuset/top-app/tasks`
+    do
+        echo ${ttask} > /dev/cpuset/foreground/tasks
+        echo ${ttask} > /dev/stune/foreground/tasks
+    done
 
 	# cpuset parameters
 	echo 0-3 > /dev/cpuset/background/cpus

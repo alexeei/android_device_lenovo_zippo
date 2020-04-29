@@ -46,7 +46,7 @@
     <bool name="config_wifi_dual_band_support">true</bool>
 
     <!-- Period of time in which to consider light samples in milliseconds. -->
-    <integer name="config_autoBrightnessAmbientLightHorizon">5000</integer>
+    <integer name="config_autoBrightnessAmbientLightHorizon">2000</integer>
 
     <!-- Fast brightness animation ramp rate in brightness units per second-->
     <integer name="config_brightness_ramp_rate_fast">151</integer>
@@ -146,7 +146,7 @@
          brightness changes occur in response to an observed change in light level that exceeds the
          hysteresis threshold. -->
     <integer name="config_autoBrightnessBrighteningLightDebounce">2000</integer>
-    <integer name="config_autoBrightnessDarkeningLightDebounce">5000</integer>
+    <integer name="config_autoBrightnessDarkeningLightDebounce">3000</integer>
 
     <!-- Whether the always on display mode is available. -->
     <bool name="config_dozeAlwaysOnDisplayAvailable">true</bool>
@@ -229,18 +229,25 @@
          Must be overridden in platform specific overlays -->
     <integer-array name="config_autoBrightnessLevels">
         <item>3</item>
-        <item>20</item>
-        <item>39</item>
-        <item>59</item>
+        <item>10</item>
+        <item>16</item>
+        <item>25</item>
+        <item>35</item>
+        <item>50</item>
+        <item>85</item>
         <item>99</item>
         <item>132</item>
+        <item>170</item>
         <item>230</item>
         <item>296</item>
         <item>362</item>
         <item>474</item>
         <item>625</item>
         <item>724</item>
+        <item>850</item>
+        <item>910</item>
         <item>987</item>
+        <item>1150</item>
         <item>1316</item>
         <item>2303</item>
     </integer-array>
@@ -257,21 +264,28 @@
          array. The brightness values must be non-negative and non-decreasing. This must be
          overridden in platform specific overlays -->
     <array name="config_autoBrightnessDisplayValuesNits">
-        <item>3</item>
-        <item>25</item>
-        <item>85</item>
-        <item>85</item>
-        <item>85</item>
-        <item>85</item>
+        <item>5</item>
+        <item>23</item>
+        <item>34</item>
+        <item>48</item>
+        <item>60</item>
+        <item>68</item>
+        <item>84</item>
+        <item>89</item>
+        <item>98</item>
         <item>110</item>
-        <item>140</item>
-        <item>180</item>
+        <item>130</item>
+        <item>153</item>
+        <item>175</item>
         <item>210</item>
         <item>250</item>
-        <item>280</item>
+        <item>275</item>
+        <item>300</item>
+        <item>310</item>
         <item>320</item>
+        <item>330</item>
         <item>340</item>
-        <item>360</item>
+        <item>370</item>
         <item>549</item>
     </array>
 

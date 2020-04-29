@@ -1,12 +1,12 @@
 on init
     # Set boottime stune value
     write /dev/stune/schedtune.prefer_idle 1
-    write /dev/stune/schedtune.boost 100
+   # write /dev/stune/schedtune.boost 100
     write /sys/kernel/debug/sched_features NO_ENERGY_AWARE
 
     # set default schedTune value for foreground/top-app
-    write /dev/stune/foreground/schedtune.prefer_idle 1
-    write /dev/stune/top-app/schedtune.boost 10
+  #  write /dev/stune/foreground/schedtune.prefer_idle 1
+  #  write /dev/stune/top-app/schedtune.boost 10
     write /dev/stune/top-app/schedtune.prefer_idle 1
 
     #flicker
@@ -26,28 +26,29 @@ on init
     write /sys/block/sde/queue/nr_requests 256
 
 on property:sys.boot_completed=1
-    write /dev/stune/schedtune.prefer_idle 0
-    write /dev/stune/schedtune.boost 0
+    write /sys/devices/virtual/touch/tp_dev/gesture_on 1
+  #  write /dev/stune/schedtune.prefer_idle 0
+  #  write /dev/stune/schedtune.boost 0
     write /sys/kernel/debug/sched_features ENERGY_AWARE
 # Runtime fs tuning
-    write /sys/block/sda/queue/nr_requests 128
+    write /sys/block/sda/queue/nr_requests 32
     write /sys/block/sda/queue/iostats 1
-    write /sys/block/sde/queue/nr_requests 128
+    write /sys/block/sde/queue/nr_requests 32
     write /sys/block/sde/queue/iostats 1
     write /sys/block/sda/queue/read_ahead_kb 128
     write /sys/block/sda/queue/read_ahead_kb 128
 
     # First initialize silver only cpus
-    write /dev/cpuset/audio-app/cpus 1-2
-    write /dev/cpuset/background/cpus 0-2
-    write /dev/cpuset/system-background/cpus 0-3
+  #  write /dev/cpuset/audio-app/cpus 1-2
+   # write /dev/cpuset/background/cpus 0-2
+  #  write /dev/cpuset/system-background/cpus 0-3
 
     # And then initialize silver + gold
-    write /dev/cpuset/top-app/cpus 0-3
-    write /dev/cpuset/foreground/cpus 0-3
+  #  write /dev/cpuset/top-app/cpus 0-3
+  #  write /dev/cpuset/foreground/cpus 0-3
    # write /dev/cpuset/foreground/boost/cpus 0-3
 
-    write /dev/cpuset/top-app/cpus 0-7
-    write /dev/cpuset/foreground/cpus 0-2,4-7
+  #  write /dev/cpuset/top-app/cpus 0-7
+   # write /dev/cpuset/foreground/cpus 0-2,4-7
    # write /dev/cpuset/foreground/boost/cpus 4-7
 
