@@ -146,7 +146,7 @@ Return<int32_t> FingerprintInscreen::getPositionY() {
 }
 
 Return<int32_t> FingerprintInscreen::getSize() {
-    return 178;
+    return 185;
 }
 
 }  // namespace implementation
