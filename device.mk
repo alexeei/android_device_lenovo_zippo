@@ -96,24 +96,28 @@ PRODUCT_PACKAGES += \
     init.qcom.rc
 
 # Display
-PRODUCT_PACKAGES += \
-    memtrack.msnile \
-    libtinyxml \
-    gralloc.msmnile \
-    hwcomposer.msmnile \
+#PRODUCT_PACKAGES += \
+ #   libtinyxml \
+ #   gralloc.msmnile \
+ #   hwcomposer.msmnile \
+ #   libvulkan
+ PRODUCT_PACKAGES += \
+    libdisplayconfig \
+    libqdMetaData \
+    libqdMetaData.system \
     libvulkan
 
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.3-service \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service \
-    vendor.qti.hardware.display.allocator-service
+#PRODUCT_PACKAGES += \
+  #  android.hardware.graphics.composer@2.3-service \
+  #  android.hardware.memtrack@1.0-impl \
+  #  android.hardware.memtrack@1.0-service \
+  #  vendor.qti.hardware.display.allocator-service
 
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@2.0-impl-qti-display
+#PRODUCT_PACKAGES += \
+ #   android.hardware.graphics.mapper@2.0-impl-qti-display
 
-PRODUCT_PACKAGES += \
-    vendor.qti.hardware.display.mapper@3.0.vendor
+#PRODUCT_PACKAGES += \
+  #  vendor.qti.hardware.display.mapper@3.0.vendor
 
 # Face Unlock
 TARGET_FACE_UNLOCK_SUPPORTED := false
@@ -185,8 +189,8 @@ PRODUCT_PACKAGES += \
     libOmxSwVdec \
     libOmxSwVencMpeg4 \
     libOmxVdec \
-    libOmxVenc \
-    libstagefrighthw
+    libOmxVenc 
+ #   libstagefrighthw
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
@@ -258,8 +262,8 @@ PRODUCT_COPY_FILES += \
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libnl \
-    libqdMetaData
+    libnl 
+
 
 PRODUCT_BOOT_JARS += \
     WfdCommon
