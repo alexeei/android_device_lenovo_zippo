@@ -134,6 +134,12 @@ Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness) {
 
     return 255 * alpha;
     */
+	
+	/*
+	double dim = (255 + ((-12.08071) * pow((double)brightness, 0.4)));
+    return (int32_t)dim;
+    */
+	
 }
 
 Return<bool> FingerprintInscreen::shouldBoostBrightness() {
