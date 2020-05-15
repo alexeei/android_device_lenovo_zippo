@@ -79,8 +79,9 @@ Return<void> FingerprintInscreen::onPress() {
         set(DC_STATUS_PATH, DC_STATUS_OFF);
         this->shouldChangeDcStatus = true;
     }
+	set(HBM_ENABLE_PATH, 1);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
-    set(HBM_ENABLE_PATH, 1);
+    
     
     return Void();
 }
