@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
-#include <hardware_legacy/power.h>
 #include <fstream>
 
 #define CMD_FINGERPRINT_EVENT 10
@@ -73,7 +72,6 @@ Return<void> FingerprintInscreen::onFinishEnroll() {
 }
 
 Return<void> FingerprintInscreen::onPress() {
-    acquire_wake_lock(PARTIAL_WAKE_LOCK, LOG_TAG);
     this->shouldChangeDcStatus = false;
     if(1 == get(DC_STATUS_PATH,  0)) {
         set(DC_STATUS_PATH, DC_STATUS_OFF);
@@ -81,8 +79,6 @@ Return<void> FingerprintInscreen::onPress() {
     }
 	set(HBM_ENABLE_PATH, 1);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
-    
-    
     return Void();
 }
 
@@ -93,7 +89,7 @@ Return<void> FingerprintInscreen::onRelease() {
     }
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 0);
     set(HBM_ENABLE_PATH, 0);
-    release_wake_lock(LOG_TAG);
+
     return Void();
 }
 
