@@ -23,6 +23,9 @@
     <dimen name="status_bar_padding_top">1dp</dimen>
     <dimen name="status_bar_extra_padding">12dp</dimen>
     
+    <!-- The bottom margin of the keyguard security container -->
+    <dimen name="kg_security_container_min_bottom_margin">450px</dimen>
+    
 
     
   
