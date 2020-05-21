@@ -68,3 +68,4 @@ class FingerprintInscreen : public IFingerprintInscreen {
 }  // namespace vendor
 
 #endif  // VENDOR_LINEAGE_BIOMETRICS_FINGERPRINT_INSCREEN_V1_0_FINGERPRINTINSCREEN_H
+

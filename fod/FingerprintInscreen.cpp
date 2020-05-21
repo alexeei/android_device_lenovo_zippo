@@ -77,8 +77,9 @@ Return<void> FingerprintInscreen::onPress() {
         set(DC_STATUS_PATH, DC_STATUS_OFF);
         this->shouldChangeDcStatus = true;
     }
-	set(HBM_ENABLE_PATH, 1);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
+    set(HBM_ENABLE_PATH, 1);
+
     return Void();
 }
 
@@ -116,27 +117,7 @@ Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
 }
 
 Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness) {
- /*  return(int32_t)(255 * (1.0 - pow(brightness / 1023.0f, 0.455))); */
-	  
- return 255 - brightness;
-	
-	/*
-	  float alpha;
-
-    if (brightness > 62) {
-        alpha = 1.0 - pow(brightness / 255.0 * 430.0 / 600.0, 0.45);
-    } else {
-        alpha = 1.0 - pow(brightness / 200.0, 0.45);
-    }
-
-    return 255 * alpha;
-    */
-	
-	/*
-	double dim = (255 + ((-12.08071) * pow((double)brightness, 0.4)));
-    return (int32_t)dim;
-    */
-	
+    return 255 - brightness;
 }
 
 Return<bool> FingerprintInscreen::shouldBoostBrightness() {
@@ -171,3 +152,4 @@ Return<int32_t> FingerprintInscreen::getSize() {
 }  // namespace biometrics
 }  // namespace lineage
 }  // namespace vendor
+

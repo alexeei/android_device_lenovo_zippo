@@ -48,3 +48,4 @@ int main() {
     LOG(ERROR) << "FOD HAL service failed to join thread pool.";
     return 1;
 }
+
