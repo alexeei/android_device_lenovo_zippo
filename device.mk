@@ -166,8 +166,7 @@ PRODUCT_PACKAGES += \
     libebtc
 
 # IRSC
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
+
 
 # Input
 PRODUCT_COPY_FILES += \
