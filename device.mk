@@ -131,7 +131,6 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     FaceUnlockService
 TARGET_FACE_UNLOCK_SUPPORTED := true
-endif
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.face.moto_unlock_service=true
 
