@@ -152,4 +152,3 @@ Return<int32_t> FingerprintInscreen::getSize() {
 }  // namespace biometrics
 }  // namespace lineage
 }  // namespace vendor
-
