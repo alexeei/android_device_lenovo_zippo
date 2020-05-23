@@ -4,7 +4,7 @@ on init
     
     chmod 0644 /sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_hbm
 
-service fingerprint-inscreen-1-0 /vendor/bin/hw/lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
+service fingerprint-inscreen-1-0 /system/bin/hw/lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
     interface vendor.lineage.biometrics.fingerprint.inscreen@1.0::IFingerprintInscreen default
     class hal
     user system
