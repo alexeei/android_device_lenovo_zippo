@@ -10,3 +10,5 @@ allow hal_fod_lenovo sysfs_fod:file rw_file_perms;
 allow hal_fod_lenovo sysfs_graphics:dir r_dir_perms;
 allow hal_fod_lenovo sysfs_graphics:file rw_file_perms;
 allow hal_fod_lenovo sysfs_dm:file rw_file_perms;
+
+

@@ -135,6 +135,8 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
+    
+TARGET_HAS_FOD := true    
 
 EXTRA_FOD_ANIMATIONS := true
 
