@@ -20,6 +20,7 @@
 #include <hidl/HidlTransportSupport.h>
 #include <cmath>
 #include <android-base/logging.h>
+#include <hardware_legacy/power.h>
 #include <fstream>
 
 #define FINGERPRINT_ACQUIRED_VENDOR 6
@@ -108,13 +109,14 @@ Return<void> FingerprintInscreen::onRelease() {
 }
 
 Return<void> FingerprintInscreen::onShowFODView() {
+    acquire_wake_lock(PARTIAL_WAKE_LOCK, LOG_TAG);
     this->mFodCircleVisible = true;
     return Void();
 }
 
 Return<void> FingerprintInscreen::onHideFODView() {
     this->mFodCircleVisible = false;
-    set(FOD_HBM_PATH, FOD_HBM_OFF);
+    release_wake_lock(LOG_TAG);
     return Void();
 }
 
