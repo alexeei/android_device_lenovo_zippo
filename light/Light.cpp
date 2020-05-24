@@ -16,7 +16,7 @@
 
 #define LOG_TAG "light"
 
-#define MAXIMUM_DISPLAY_BRIGHTNESS 1500
+#define MAXIMUM_DISPLAY_BRIGHTNESS 2047
 
 #include <log/log.h>
 
