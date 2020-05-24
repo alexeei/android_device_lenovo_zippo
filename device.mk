@@ -19,6 +19,8 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 TARGET_SCREEN_HEIGHT := 2340
 TARGET_SCREEN_WIDTH := 1080
 
+
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
@@ -183,6 +185,11 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
 
+# Lightdisplay
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl.lenovo
+
+
 # Livedisplay
 PRODUCT_PACKAGES += \
     lineage.livedisplay@2.0-service-sdm
@@ -217,6 +224,14 @@ PRODUCT_COPY_FILES += \
 # Net
 PRODUCT_PACKAGES += \
     netutils-wrapper-1.0
+    
+# NoCutout
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
+    
+# NoCutout
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
