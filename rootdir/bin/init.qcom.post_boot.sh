@@ -4200,6 +4200,13 @@ case "$target" in
 	echo 25 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
 	echo 70 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 	echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
+	
+	#zram
+	lock_value "100" /proc/sys/vm/swappiness
+        lock_value "lz4" /sys/block/zram0/comp_algorithm
+        lock_value "2G" /sys/block/zram0/disksize
+        lock_value "0" /proc/sys/vm/page-cluster
+	
 	# Controls how many more tasks should be eligible to run on gold CPUs
 	# w.r.t number of gold CPUs available to trigger assist (max number of
 	# tasks eligible to run on previous cluster minus number of CPUs in
