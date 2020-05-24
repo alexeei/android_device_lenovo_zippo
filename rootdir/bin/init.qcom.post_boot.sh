@@ -4217,9 +4217,9 @@ case "$target" in
 	echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
 	# Setting b.L scheduler parameters
-	echo 90 85 > /proc/sys/kernel/sched_upmigrate
-	echo 90 60 > /proc/sys/kernel/sched_downmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo 95 95 > /proc/sys/kernel/sched_upmigrate
+	echo 85 85 > /proc/sys/kernel/sched_downmigrate
+	#echo "90 60" > /proc/sys/kernel/sched_downmigrate
 	echo 100 > /proc/sys/kernel/sched_group_upmigrate
 	echo 10 > /proc/sys/kernel/sched_group_downmigrate
 	echo 0 > /proc/sys/kernel/sched_walt_rotate_big_tasks
@@ -4230,10 +4230,17 @@ case "$target" in
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
 	# cpuset parameters
-	echo 0-3 > /dev/cpuset/background/cpus
-	echo 0-3 > /dev/cpuset/system-background/cpus
-
+	echo 0-1 > /dev/cpuset/background/cpus
+	echo 0-2 > /dev/cpuset/system-background/cpus
+        echo 0-3 > /dev/cpuset/restricted/cpus
 	echo 0-3 > /dev/cpuset/foreground/cpus
+	
+	# Setup final blkio
+    # value for group_idle is us
+    echo 1000 > /dev/blkio/blkio.weight
+    echo 200 > /dev/blkio/background/blkio.weight
+    echo 2000 > /dev/blkio/blkio.group_idle
+    echo 0 > /dev/blkio/background/blkio.group_idle
 	
 	change_task_cgroup "crtc_commit" "display" "cpuset"
 	
@@ -4336,7 +4343,7 @@ case "$target" in
 	# echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 	# echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
 	# else VENDOR_EDIT
-	lock_value "0:1017600 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+	lock_value "0:1017600 " /sys/module/cpu_boost/parameters/input_boost_freq
     lock_value "100" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 	# endif VENDOR_EDIT

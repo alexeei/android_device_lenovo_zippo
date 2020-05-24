@@ -50,7 +50,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610  \
     ro.hardware.vulkan=adreno  \
     vendor.gralloc.disable_ubwc=0  \
-    debug.egl.hw=1
+    debug.egl.hw=1   \
+    debug.sf.hw=1
 
 # GPS
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -78,7 +79,8 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     media.settings.xml=/system/etc/media_profiles_vendor.xml \
-    vendor.mm.enable.qcom_parser=63963135
+    vendor.mm.enable.qcom_parser=63963135 \
+    debug.stagefright.omx_default_rank.sw-audio=16
 
 # Memory optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -128,6 +130,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
 ro.surface_flinger.has_wide_color_display=true  \
 ro.surface_flinger.has_HDR_display=true  
+
 
 
 
