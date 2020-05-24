@@ -452,7 +452,7 @@ low_ram=`getprop ro.config.low_ram`
 if [ "$ProductName" == "msmnile" ]; then
       # Enable ZRAM
     write /proc/sys/vm/swappiness 100
-    write /sys/block/zram0/comp_algorithm zstd
+    write /sys/block/zram0/comp_algorithm lz4
     write /sys/block/zram0/disksize 1G
     write /proc/sys/vm/page-cluster 0
     exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
