@@ -132,7 +132,9 @@ ro.surface_flinger.has_wide_color_display=true  \
 ro.surface_flinger.has_HDR_display=true  
 
 
-
+#face
+PRODUCT_PROPERTY_OVERRIDES += \
+ro.face.moto_unlock_service=true
 
 
 # Set lmkd options

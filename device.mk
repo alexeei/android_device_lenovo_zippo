@@ -135,13 +135,12 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
   #  vendor.qti.hardware.display.mapper@3.0.vendor
 
-# Face Unlock
+# Face
 PRODUCT_PACKAGES += \
     faceunlock_utils \
     FaceUnlockService
 TARGET_FACE_UNLOCK_SUPPORTED := true
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.face.moto_unlock_service=true
+
 
 
 # Fingerprint
