@@ -137,6 +137,7 @@ PRODUCT_PACKAGES += \
 
 # Face Unlock
 PRODUCT_PACKAGES += \
+    faceunlock_utils \
     FaceUnlockService
 TARGET_FACE_UNLOCK_SUPPORTED := true
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
@@ -164,6 +165,7 @@ PRODUCT_PACKAGES += \
     FM2 \
     libqcomfm_jni \
     qcom.fmradio
+
 
 
 # HIDL
