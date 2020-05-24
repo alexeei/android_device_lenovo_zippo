@@ -200,7 +200,7 @@ function 8953_sched_dcvs_hmp()
     echo 0 > /sys/devices/system/cpu/cpu6/sched_static_cpu_pwr_cost
     echo 0 > /sys/devices/system/cpu/cpu7/sched_static_cpu_pwr_cost
     # spill load is set to 100% by default in the kernel
-    echo 3 > /proc/sys/kernel/sched_spill_nr_run
+    #echo 3 > /proc/sys/kernel/sched_spill_nr_run
     # Apply inter-cluster load balancer restrictions
     echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
     # set sync wakee policy tunable
@@ -1795,7 +1795,7 @@ case "$target" in
                 fi
 
                 #init task load, restrict wakeups to preferred cluster
-                echo 15 > /proc/sys/kernel/sched_init_task_load
+
 
                 for devfreq_gov in /sys/class/devfreq/qcom,mincpubw*/governor
                 do
@@ -2513,7 +2513,7 @@ case "$target" in
             echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
             echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
             echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-            echo 5 > /proc/sys/kernel/sched_spill_nr_run
+            #echo 5 > /proc/sys/kernel/sched_spill_nr_run
             echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
             echo 100000 > /proc/sys/kernel/sched_short_burst_ns
             echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
@@ -2653,10 +2653,9 @@ case "$target" in
             echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
             echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
             echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-            echo 3 > /proc/sys/kernel/sched_spill_nr_run
+           # echo 3 > /proc/sys/kernel/sched_spill_nr_run
 
             #init task load, restrict wakeups to preferred cluster
-            echo 15 > /proc/sys/kernel/sched_init_task_load
             echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
             echo 50000 > /proc/sys/kernel/sched_short_burst_ns
 
@@ -3975,8 +3974,6 @@ case "$target" in
         echo 45 > /proc/sys/kernel/sched_upmigrate
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-        echo 3 > /proc/sys/kernel/sched_spill_nr_run
-        echo 100 > /proc/sys/kernel/sched_init_task_load
         # Enable bus-dcvs
         for cpubw in /sys/class/devfreq/*qcom,cpubw*
         do
@@ -4726,7 +4723,7 @@ case "$target" in
 	echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
 	echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
 	echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-	echo 5 > /proc/sys/kernel/sched_spill_nr_run
+	#echo 5 > /proc/sys/kernel/sched_spill_nr_run
 	echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
         echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
 	start iop
