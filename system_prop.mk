@@ -50,8 +50,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610  \
     ro.hardware.vulkan=adreno  \
     vendor.gralloc.disable_ubwc=0  \
-    debug.egl.hw=1   \
-    debug.sf.hw=1
+    debug.egl.hw=1
 
 # GPS
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -79,8 +78,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # Media
 PRODUCT_PROPERTY_OVERRIDES += \
     media.settings.xml=/system/etc/media_profiles_vendor.xml \
-    vendor.mm.enable.qcom_parser=63963135 \
-    debug.stagefright.omx_default_rank.sw-audio=16
+    vendor.mm.enable.qcom_parser=63963135
 
 # Memory optimizations
 PRODUCT_PROPERTY_OVERRIDES += \
@@ -128,12 +126,20 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # SurfaceFlinger
 PRODUCT_PROPERTY_OVERRIDES += \
+debug.sf.enable_hwc_vds=1  \
+debug.sf.hw=1  \
+persist.sys.sf.color_saturation=1.0  \
+debug.sf.latch_unsignaled=1  \
+ro.surface_flinger.max_frame_buffer_acquired_buffers=3  \
+ro.surface_flinger.vsync_event_phase_offset_ns=2000000  \
+ro.surface_flinger.vsync_sf_event_phase_offset_ns=6000000  \
+ro.surface_flinger.force_hwc_copy_for_virtual_displays=true  \
 ro.surface_flinger.has_wide_color_display=true  \
-ro.surface_flinger.has_HDR_display=true  
-
-
-
-
+ro.surface_flinger.has_HDR_display=true  \
+ro.surface_flinger.max_virtual_display_dimension=4096  \
+ro.surface_flinger.protected_contents=true  \
+ro.surface_flinger.use_color_management=true  \
+ro.surface_flinger.wcg_composition_dataspace=143261696
 
 # Set lmkd options
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -142,13 +148,12 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.lmk.kill_timeout_ms = 100 \
     ro.lmk.use_minfree_levels = true \
     ro.lmk.log_stats = true
-    
+
 # USB debugging
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp,adb \
     ro.adb.secure=0 \
     ro.secure=0 
-   
 
 # WiFi Display
 PRODUCT_PRODUCT_PROPERTIES += \
