@@ -183,6 +183,10 @@ PRODUCT_COPY_FILES += \
 
 
 
+# Lightdisplay
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl.lenovo
+
 
 # Livedisplay
 PRODUCT_PACKAGES += \
