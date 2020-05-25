@@ -145,9 +145,9 @@ PRODUCT_PRODUCT_PROPERTIES += \
     
 # USB debugging
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
-    ro.adb.secure=0 \
-    ro.secure=0 
+    persist.sys.usb.config=mtp \
+    ro.adb.secure=1 \
+    ro.secure=1 
    
 
 # WiFi Display
