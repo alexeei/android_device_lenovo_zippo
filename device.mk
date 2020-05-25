@@ -182,9 +182,6 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
 
 
-# NoCutout
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay
 
 # Lightdisplay
 PRODUCT_PACKAGES += \
