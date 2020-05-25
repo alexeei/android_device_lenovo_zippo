@@ -135,18 +135,6 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
   #  vendor.qti.hardware.display.mapper@3.0.vendor
 
-# Face
-
-# Face Unlock
-TARGET_FACE_UNLOCK_SUPPORTED := false
-ifneq ($(TARGET_DISABLE_ALTERNATIVE_FACE_UNLOCK), true)
-PRODUCT_PACKAGES += \
-    faceunlock_utils \
-    FaceUnlockService
-TARGET_FACE_UNLOCK_SUPPORTED := true
-endif
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.face.moto_unlock_service=$(TARGET_FACE_UNLOCK_SUPPORTED)
 
 
 
@@ -158,7 +146,7 @@ PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
     
 TARGET_HAS_FOD := true   
-TARGET_USES_FOD_HACK := true 
+#TARGET_USES_FOD_HACK := true 
 
 EXTRA_FOD_ANIMATIONS := true
 
@@ -233,13 +221,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     netutils-wrapper-1.0
     
-# NoCutout
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay
-    
-# NoCutout
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay
+
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
