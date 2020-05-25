@@ -80,21 +80,13 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessingdescriptors \
     libqcompostprocbundle \
     tinymix \
-    libaudio-resampler \
-    libwebrtc_audio_preprocessing \
-    libalsautils \
-    tinycap \
-    tinyplay \
-    tinypcminfo 
+    libaudio-resampler
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_effects.xml \
     $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_policy_configuration.xml \
     $(LOCAL_PATH)/configs/audio/mixer_paths_tavil.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/mixer_paths_tavil.xml \
     $(LOCAL_PATH)/configs/audio/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio/audio_policy_configuration.xml
 
- PRODUCT_PROPERTY_OVERRIDES += \
- vendor.audio.dolby.ds2.enabled=true 
 
 
 # Camera
@@ -107,28 +99,24 @@ PRODUCT_PACKAGES += \
     init.qcom.rc
 
 # Display
-#PRODUCT_PACKAGES += \
- #   libtinyxml \
- #   gralloc.msmnile \
- #   hwcomposer.msmnile \
- #   libvulkan
- PRODUCT_PACKAGES += \
-    libdisplayconfig \
-    libqdMetaData \
-    libqdMetaData.system \
+PRODUCT_PACKAGES += \
+    memtrack.msnile \
+    libtinyxml \
+    gralloc.msmnile \
+    hwcomposer.msmnile \
     libvulkan
 
-#PRODUCT_PACKAGES += \
-  #  android.hardware.graphics.composer@2.3-service \
-  #  android.hardware.memtrack@1.0-impl \
-  #  android.hardware.memtrack@1.0-service \
-  #  vendor.qti.hardware.display.allocator-service
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.3-service \
+    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service \
+    vendor.qti.hardware.display.allocator-service
 
-#PRODUCT_PACKAGES += \
- #   android.hardware.graphics.mapper@2.0-impl-qti-display
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.mapper@2.0-impl-qti-display
 
-#PRODUCT_PACKAGES += \
-  #  vendor.qti.hardware.display.mapper@3.0.vendor
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.display.mapper@3.0.vendor
 
 # Face Unlock
 TARGET_FACE_UNLOCK_SUPPORTED := false
@@ -147,8 +135,6 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
-    
-TARGET_HAS_FOD := true    
 
 EXTRA_FOD_ANIMATIONS := true
 
@@ -173,10 +159,6 @@ PRODUCT_PACKAGES += \
     ethertypes \
     libebtc
 
-# IRSC
-PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
-
 # Input
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
@@ -188,9 +170,7 @@ PRODUCT_PACKAGES += \
 
 # Media
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
-    $(LOCAL_PATH)/configs/media_profiles_vendor.xml:system/etc/media_profiles_vendor.xml \
-    $(LOCAL_PATH)/configs/media_codecs_dolby_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_dolby_audio.xml 
+    $(LOCAL_PATH)/configs/media_profiles_vendor.xml:system/etc/media_profiles_vendor.xml
 
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
@@ -204,8 +184,8 @@ PRODUCT_PACKAGES += \
     libOmxSwVdec \
     libOmxSwVencMpeg4 \
     libOmxVdec \
-    libOmxVenc 
- #   libstagefrighthw
+    libOmxVenc \
+    libstagefrighthw
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
@@ -255,8 +235,8 @@ PRODUCT_PACKAGES += \
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libnl 
-
+    libnl \
+    libqdMetaData
 
 PRODUCT_BOOT_JARS += \
     WfdCommon
