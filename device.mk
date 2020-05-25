@@ -19,15 +19,10 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 TARGET_SCREEN_HEIGHT := 2340
 TARGET_SCREEN_WIDTH := 1080
 
-
-
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage \
-    vendor/addons/overlay-fod  
-
-    
+    $(LOCAL_PATH)/overlay-lineage
 
 # Properties
 -include $(LOCAL_PATH)/system_prop.mk
@@ -135,16 +130,12 @@ PRODUCT_PACKAGES += \
 #PRODUCT_PACKAGES += \
   #  vendor.qti.hardware.display.mapper@3.0.vendor
 
-# Face
-
 # Face Unlock
-TARGET_FACE_UNLOCK := true
 PRODUCT_PACKAGES += \
     FaceUnlockService
 TARGET_FACE_UNLOCK_SUPPORTED := true
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.face.moto_unlock_service=true
-
 
 
 # Fingerprint
@@ -154,8 +145,7 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
     
-TARGET_HAS_FOD := true   
-#TARGET_USES_FOD_HACK := true 
+TARGET_HAS_FOD := true    
 
 EXTRA_FOD_ANIMATIONS := true
 
@@ -168,7 +158,6 @@ PRODUCT_PACKAGES += \
     FM2 \
     libqcomfm_jni \
     qcom.fmradio
-
 
 
 # HIDL
@@ -189,11 +178,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
-
-# Lightdisplay
-PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl.lenovo
-
 
 # Livedisplay
 PRODUCT_PACKAGES += \
@@ -229,14 +213,6 @@ PRODUCT_COPY_FILES += \
 # Net
 PRODUCT_PACKAGES += \
     netutils-wrapper-1.0
-    
-# NoCutout
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay
-    
-# NoCutout
-PRODUCT_PACKAGES += \
-    NoCutoutOverlay
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -249,10 +225,6 @@ PRODUCT_COPY_FILES += \
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.2-service
-
-#Recorder
-PRODUCT_PACKAGES += \
-    Recorder
 
 # RIL
 PRODUCT_PACKAGES += \

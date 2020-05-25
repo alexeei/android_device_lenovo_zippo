@@ -149,17 +149,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.lmk.use_minfree_levels = true \
     ro.lmk.log_stats = true
 
-# USB debugging
-PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp,adb \
-    ro.adb.secure=0 \
-    ro.secure=0 
-
 # WiFi Display
 PRODUCT_PRODUCT_PROPERTIES += \
 persist.debug.wfd.enable=1  \
 persist.sys.wfd.virtual=0
-
-#Memplus
-PRODUCT_PRODUCT_PROPERTIES += \
-persist.vendor.memplus.enable=1

@@ -55,7 +55,6 @@ class FingerprintInscreen : public IFingerprintInscreen {
   private:
     bool mFodCircleVisible;
     sp<IGoodixFPExtendService> mVendorFpService;
-    bool shouldChangeDcStatus;
     std::mutex mCallbackLock;
     sp<IFingerprintInscreenCallback> mCallback;
 };
