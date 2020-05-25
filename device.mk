@@ -181,9 +181,7 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
 
-# Lightdisplay
-PRODUCT_PACKAGES += \
-    android.hardware.light@2.0-impl.lenovo
+
 
 
 # Livedisplay
