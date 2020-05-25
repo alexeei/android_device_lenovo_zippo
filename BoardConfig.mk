@@ -190,7 +190,7 @@ BOARD_PLAT_PUBLIC_SEPOLICY_DIR += \
 TARGET_USES_INTERACTION_BOOST := true
 TARGET_TAP_TO_WAKE_NODE := "/sys/devices/virtual/touch/tp_dev/gesture_on"
 TARGET_WLAN_POWER_STAT := "/sys/kernel/wlan/power_stats"
-TARGET_USES_NON_LEGACY_POWERHAL := true
+
 
 # Treble
 BOARD_VNDK_VERSION := current
