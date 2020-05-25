@@ -17,19 +17,35 @@
 #define LOG_TAG "FingerprintInscreenService"
 
 #include "FingerprintInscreen.h"
-
-#include <unistd.h>
-#include <android-base/logging.h>
 #include <hidl/HidlTransportSupport.h>
+#include <cmath>
+#include <android-base/logging.h>
+#include <hardware_legacy/power.h>
 #include <fstream>
+
+#define FINGERPRINT_ACQUIRED_VENDOR 6
+#define FINGERPRINT_ERROR_VENDOR 8
+
+#define OP_ENABLE_FP_LONGPRESS 3
+#define OP_DISABLE_FP_LONGPRESS 4
+#define OP_RESUME_FP_ENROLL 8
+#define OP_FINISH_FP_ENROLL 10
+
+#define OP_DISPLAY_AOD_MODE 8
+#define OP_DISPLAY_NOTIFY_PRESS 9
+#define OP_DISPLAY_SET_DIM 10
 
 #define CMD_FINGERPRINT_EVENT 10
 
-#define HBM_ENABLE_PATH "/sys/class/backlight/panel0-hbm/brightness"
+#define FOD_HBM_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_hbm"
+#define FOD_HBM_ON 1
+#define FOD_HBM_OFF 0
 
 #define DC_STATUS_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/msm_fb_ea_enable"
 #define DC_STATUS_ON 1
 #define DC_STATUS_OFF 0
+
+#define BRIGHTNESS_PATH "/sys/class/backlight/panel0-backlight/brightness"
 
 namespace vendor {
 namespace lineage {
@@ -38,6 +54,8 @@ namespace fingerprint {
 namespace inscreen {
 namespace V1_0 {
 namespace implementation {
+
+
 
 /*
  * Write value to path and close file.
@@ -58,7 +76,10 @@ static T get(const std::string& path, const T& def) {
     return file.fail() ? def : result;
 }
 
+
+
 FingerprintInscreen::FingerprintInscreen() {
+    this->mFodCircleVisible = false;
     this->mVendorFpService = IGoodixFPExtendService::getService();
 }
 
@@ -72,38 +93,58 @@ Return<void> FingerprintInscreen::onFinishEnroll() {
 }
 
 Return<void> FingerprintInscreen::onPress() {
-    this->shouldChangeDcStatus = false;
-    if(1 == get(DC_STATUS_PATH,  0)) {
-        set(DC_STATUS_PATH, DC_STATUS_OFF);
-        this->shouldChangeDcStatus = true;
-    }
+    set(FOD_HBM_PATH, FOD_HBM_ON);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
-    set(HBM_ENABLE_PATH, 1);
+    
 
     return Void();
 }
 
 Return<void> FingerprintInscreen::onRelease() {
-    if(true == this->shouldChangeDcStatus) {
-	set(DC_STATUS_PATH, DC_STATUS_ON);
-	this->shouldChangeDcStatus = false;
-    }
+    set(FOD_HBM_PATH, FOD_HBM_OFF);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 0);
-    set(HBM_ENABLE_PATH, 0);
+  
 
     return Void();
 }
 
 Return<void> FingerprintInscreen::onShowFODView() {
+    acquire_wake_lock(PARTIAL_WAKE_LOCK, LOG_TAG);
+    this->mFodCircleVisible = true;
     return Void();
 }
 
 Return<void> FingerprintInscreen::onHideFODView() {
+    this->mFodCircleVisible = false;
+    release_wake_lock(LOG_TAG);
     return Void();
 }
 
 Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
     LOG(ERROR) << "acquiredInfo: " << acquiredInfo << ", vendorCode: " << vendorCode << "\n";
+    std::lock_guard<std::mutex> _lock(mCallbackLock);
+    if (mCallback == nullptr) {
+        return false;
+    }
+    
+    if (acquiredInfo == FINGERPRINT_ACQUIRED_VENDOR) {
+        if (mFodCircleVisible && vendorCode == 0) {
+            Return<void> ret = mCallback->onFingerDown();
+            if (!ret.isOk()) {
+                LOG(ERROR) << "FingerDown() error: " << ret.description();
+            }
+            return true;
+        }
+
+        if (mFodCircleVisible && vendorCode == 1) {
+            Return<void> ret = mCallback->onFingerUp();
+            if (!ret.isOk()) {
+                LOG(ERROR) << "FingerUp() error: " << ret.description();
+            }
+            return true;
+        }
+    }
+    
     return false;
 }
 
@@ -116,8 +157,17 @@ Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
     return Void();
 }
 
-Return<int32_t> FingerprintInscreen::getDimAmount(int32_t brightness) {
-    return 255 - brightness;
+Return<int32_t> FingerprintInscreen::getDimAmount(int32_t)  {
+    int realBrightness = get(BRIGHTNESS_PATH, 0);
+    
+
+    double dim = (255 + ((-12.08071) * pow((double)realBrightness, 0.4)));
+    LOG(INFO) << "dimAmount = " << dim;
+    return (int32_t)dim;
+    
+    
+
+   
 }
 
 Return<bool> FingerprintInscreen::shouldBoostBrightness() {

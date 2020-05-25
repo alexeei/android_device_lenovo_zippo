@@ -200,7 +200,7 @@ function 8953_sched_dcvs_hmp()
     echo 0 > /sys/devices/system/cpu/cpu6/sched_static_cpu_pwr_cost
     echo 0 > /sys/devices/system/cpu/cpu7/sched_static_cpu_pwr_cost
     # spill load is set to 100% by default in the kernel
-    echo 3 > /proc/sys/kernel/sched_spill_nr_run
+    #echo 3 > /proc/sys/kernel/sched_spill_nr_run
     # Apply inter-cluster load balancer restrictions
     echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
     # set sync wakee policy tunable
@@ -335,35 +335,7 @@ function 8937_sched_dcvs_hmp()
 }
 target=`getprop ro.board.platform`
 
-function configure_zram_parameters() {
-    MemTotalStr=`cat /proc/meminfo | grep MemTotal`
-    MemTotal=${MemTotalStr:16:8}
 
-    low_ram=`getprop ro.config.low_ram`
-
-    # Zram disk - 75% for Go devices.
-    # For 512MB Go device, size = 384MB, set same for Non-Go.
-    # For 1GB Go device, size = 768MB, set same for Non-Go.
-    # For >=2GB Non-Go device, size = 1GB
-    # And enable lz4 zram compression for Go targets.
-
-    if [ "$low_ram" == "true" ]; then
-        echo lz4 > /sys/block/zram0/comp_algorithm
-    fi
-
-    if [ -f /sys/block/zram0/disksize ]; then
-        if [ $MemTotal -le 524288 ]; then
-            echo 402653184 > /sys/block/zram0/disksize
-        elif [ $MemTotal -le 1048576 ]; then
-            echo 805306368 > /sys/block/zram0/disksize
-        else
-            # Set Zram disk size=1GB for >=2GB Non-Go targets.
-            echo 1073741824 > /sys/block/zram0/disksize
-        fi
-        mkswap /dev/block/zram0
-        swapon /dev/block/zram0 -p 32758
-    fi
-}
 
 function configure_read_ahead_kb_values() {
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
@@ -479,10 +451,11 @@ low_ram=`getprop ro.config.low_ram`
 
 if [ "$ProductName" == "msmnile" ]; then
       # Enable ZRAM
-      configure_zram_parameters
-      configure_read_ahead_kb_values
-      echo 0 > /proc/sys/vm/page-cluster
-      echo 100 > /proc/sys/vm/swappiness
+    write /proc/sys/vm/swappiness 100
+    write /sys/block/zram0/comp_algorithm lz4
+    write /sys/block/zram0/disksize 1G
+    write /proc/sys/vm/page-cluster 0
+    exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
 else
     arch_type=`uname -m`
     MemTotalStr=`cat /proc/meminfo | grep MemTotal`
@@ -1822,7 +1795,7 @@ case "$target" in
                 fi
 
                 #init task load, restrict wakeups to preferred cluster
-                echo 15 > /proc/sys/kernel/sched_init_task_load
+
 
                 for devfreq_gov in /sys/class/devfreq/qcom,mincpubw*/governor
                 do
@@ -2540,7 +2513,7 @@ case "$target" in
             echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
             echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
             echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-            echo 5 > /proc/sys/kernel/sched_spill_nr_run
+            #echo 5 > /proc/sys/kernel/sched_spill_nr_run
             echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
             echo 100000 > /proc/sys/kernel/sched_short_burst_ns
             echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
@@ -2680,10 +2653,9 @@ case "$target" in
             echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
             echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
             echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-            echo 3 > /proc/sys/kernel/sched_spill_nr_run
+           # echo 3 > /proc/sys/kernel/sched_spill_nr_run
 
             #init task load, restrict wakeups to preferred cluster
-            echo 15 > /proc/sys/kernel/sched_init_task_load
             echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
             echo 50000 > /proc/sys/kernel/sched_short_burst_ns
 
@@ -4002,8 +3974,6 @@ case "$target" in
         echo 45 > /proc/sys/kernel/sched_upmigrate
         echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
         echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-        echo 3 > /proc/sys/kernel/sched_spill_nr_run
-        echo 100 > /proc/sys/kernel/sched_init_task_load
         # Enable bus-dcvs
         for cpubw in /sys/class/devfreq/*qcom,cpubw*
         do
@@ -4230,6 +4200,13 @@ case "$target" in
 	echo 25 > /sys/devices/system/cpu/cpu7/core_ctl/busy_down_thres
 	echo 70 > /sys/devices/system/cpu/cpu7/core_ctl/offline_delay_ms
 	echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
+	
+	#zram
+	lock_value "100" /proc/sys/vm/swappiness
+        lock_value "lz4" /sys/block/zram0/comp_algorithm
+        lock_value "2G" /sys/block/zram0/disksize
+        lock_value "0" /proc/sys/vm/page-cluster
+	
 	# Controls how many more tasks should be eligible to run on gold CPUs
 	# w.r.t number of gold CPUs available to trigger assist (max number of
 	# tasks eligible to run on previous cluster minus number of CPUs in
@@ -4244,9 +4221,9 @@ case "$target" in
 	echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
 	# Setting b.L scheduler parameters
-	echo 90 85 > /proc/sys/kernel/sched_upmigrate
-	echo 90 60 > /proc/sys/kernel/sched_downmigrate
-	echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo 95 95 > /proc/sys/kernel/sched_upmigrate
+	echo 85 85 > /proc/sys/kernel/sched_downmigrate
+	#echo "90 60" > /proc/sys/kernel/sched_downmigrate
 	echo 100 > /proc/sys/kernel/sched_group_upmigrate
 	echo 10 > /proc/sys/kernel/sched_group_downmigrate
 	echo 0 > /proc/sys/kernel/sched_walt_rotate_big_tasks
@@ -4257,10 +4234,17 @@ case "$target" in
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
 	# cpuset parameters
-	echo 0-3 > /dev/cpuset/background/cpus
-	echo 0-3 > /dev/cpuset/system-background/cpus
-
+	echo 0-1 > /dev/cpuset/background/cpus
+	echo 0-2 > /dev/cpuset/system-background/cpus
+        echo 0-3 > /dev/cpuset/restricted/cpus
 	echo 0-3 > /dev/cpuset/foreground/cpus
+	
+	# Setup final blkio
+    # value for group_idle is us
+    echo 1000 > /dev/blkio/blkio.weight
+    echo 200 > /dev/blkio/background/blkio.weight
+    echo 2000 > /dev/blkio/blkio.group_idle
+    echo 0 > /dev/blkio/background/blkio.group_idle
 	
 	change_task_cgroup "crtc_commit" "display" "cpuset"
 	
@@ -4363,8 +4347,8 @@ case "$target" in
 	# echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 	# echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
 	# else VENDOR_EDIT
-	lock_value "0:1036800 4:1056000 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "500" /sys/module/cpu_boost/parameters/input_boost_ms
+	lock_value "0:1017600 " /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "100" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
 	# endif VENDOR_EDIT
 
@@ -4481,7 +4465,7 @@ case "$target" in
 	    for latfloor in $device/*cpu-ddr-latfloor*/devfreq/*cpu-ddr-latfloor*
 	    do
 		echo "compute" > $latfloor/governor
-		echo 10 > $latfloor/polling_interval
+		echo 8 > $latfloor/polling_interval
 	    done
 
 	    #Gold L3 ratio ceil
@@ -4746,7 +4730,7 @@ case "$target" in
 	echo 0 > /proc/sys/kernel/sched_select_prev_cpu_us
 	echo 400000 > /proc/sys/kernel/sched_freq_inc_notify
 	echo 400000 > /proc/sys/kernel/sched_freq_dec_notify
-	echo 5 > /proc/sys/kernel/sched_spill_nr_run
+	#echo 5 > /proc/sys/kernel/sched_spill_nr_run
 	echo 1 > /proc/sys/kernel/sched_restrict_cluster_spill
         echo 1 > /proc/sys/kernel/sched_prefer_sync_wakee_to_waker
 	start iop

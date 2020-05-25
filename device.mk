@@ -19,10 +19,15 @@ PRODUCT_TARGET_VNDK_VERSION := 29
 TARGET_SCREEN_HEIGHT := 2340
 TARGET_SCREEN_WIDTH := 1080
 
+
+
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
-    $(LOCAL_PATH)/overlay-lineage
+    $(LOCAL_PATH)/overlay-lineage \
+    vendor/lineage/overlay/fod  \
+    vendor/addons/overlay-fod
+    
 
 # Properties
 -include $(LOCAL_PATH)/system_prop.mk
@@ -80,13 +85,21 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessingdescriptors \
     libqcompostprocbundle \
     tinymix \
-    libaudio-resampler
+    libaudio-resampler \
+    libwebrtc_audio_preprocessing \
+    libalsautils \
+    tinycap \
+    tinyplay \
+    tinypcminfo 
 
 PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_effects.xml \
     $(LOCAL_PATH)/configs/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_policy_configuration.xml \
     $(LOCAL_PATH)/configs/audio/mixer_paths_tavil.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/mixer_paths_tavil.xml \
     $(LOCAL_PATH)/configs/audio/audio/audio_policy_configuration.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio/audio_policy_configuration.xml
 
+ PRODUCT_PROPERTY_OVERRIDES += \
+ vendor.audio.dolby.ds2.enabled=true 
 
 
 # Camera
@@ -99,34 +112,42 @@ PRODUCT_PACKAGES += \
     init.qcom.rc
 
 # Display
-PRODUCT_PACKAGES += \
-    memtrack.msnile \
-    libtinyxml \
-    gralloc.msmnile \
-    hwcomposer.msmnile \
+#PRODUCT_PACKAGES += \
+ #   libtinyxml \
+ #   gralloc.msmnile \
+ #   hwcomposer.msmnile \
+ #   libvulkan
+ PRODUCT_PACKAGES += \
+    libdisplayconfig \
+    libqdMetaData \
+    libqdMetaData.system \
     libvulkan
 
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.composer@2.3-service \
-    android.hardware.memtrack@1.0-impl \
-    android.hardware.memtrack@1.0-service \
-    vendor.qti.hardware.display.allocator-service
+#PRODUCT_PACKAGES += \
+  #  android.hardware.graphics.composer@2.3-service \
+  #  android.hardware.memtrack@1.0-impl \
+  #  android.hardware.memtrack@1.0-service \
+  #  vendor.qti.hardware.display.allocator-service
 
-PRODUCT_PACKAGES += \
-    android.hardware.graphics.mapper@2.0-impl-qti-display
+#PRODUCT_PACKAGES += \
+ #   android.hardware.graphics.mapper@2.0-impl-qti-display
 
-PRODUCT_PACKAGES += \
-    vendor.qti.hardware.display.mapper@3.0.vendor
+#PRODUCT_PACKAGES += \
+  #  vendor.qti.hardware.display.mapper@3.0.vendor
+
+# Face
 
 # Face Unlock
 TARGET_FACE_UNLOCK_SUPPORTED := false
 ifneq ($(TARGET_DISABLE_ALTERNATIVE_FACE_UNLOCK), true)
 PRODUCT_PACKAGES += \
+    faceunlock_utils \
     FaceUnlockService
 TARGET_FACE_UNLOCK_SUPPORTED := true
 endif
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.face.moto_unlock_service=$(TARGET_FACE_UNLOCK_SUPPORTED)
+
 
 
 # Fingerprint
@@ -135,6 +156,9 @@ PRODUCT_COPY_FILES += \
 
 PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
+    
+TARGET_HAS_FOD := true   
+TARGET_USES_FOD_HACK := true 
 
 EXTRA_FOD_ANIMATIONS := true
 
@@ -149,6 +173,7 @@ PRODUCT_PACKAGES += \
     qcom.fmradio
 
 
+
 # HIDL
 PRODUCT_PACKAGES += \
     android.hidl.base@1.0 \
@@ -159,10 +184,19 @@ PRODUCT_PACKAGES += \
     ethertypes \
     libebtc
 
+# IRSC
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/configs/sec_config:$(TARGET_COPY_OUT_VENDOR)/etc/sec_config
+
 # Input
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/gpio-keys.kl:system/usr/keylayout/gpio-keys.kl \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
+
+# Lightdisplay
+PRODUCT_PACKAGES += \
+    android.hardware.light@2.0-impl.lenovo
+
 
 # Livedisplay
 PRODUCT_PACKAGES += \
@@ -170,7 +204,9 @@ PRODUCT_PACKAGES += \
 
 # Media
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/media_profiles_vendor.xml:system/etc/media_profiles_vendor.xml
+    $(LOCAL_PATH)/configs/media_codecs.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs.xml \
+    $(LOCAL_PATH)/configs/media_profiles_vendor.xml:system/etc/media_profiles_vendor.xml \
+    $(LOCAL_PATH)/configs/media_codecs_dolby_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_dolby_audio.xml 
 
 PRODUCT_PACKAGES += \
     libc2dcolorconvert \
@@ -184,8 +220,8 @@ PRODUCT_PACKAGES += \
     libOmxSwVdec \
     libOmxSwVencMpeg4 \
     libOmxVdec \
-    libOmxVenc \
-    libstagefrighthw
+    libOmxVenc 
+ #   libstagefrighthw
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
@@ -196,6 +232,14 @@ PRODUCT_COPY_FILES += \
 # Net
 PRODUCT_PACKAGES += \
     netutils-wrapper-1.0
+    
+# NoCutout
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
+    
+# NoCutout
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
 
 # Soong namespaces
 PRODUCT_SOONG_NAMESPACES += \
@@ -208,6 +252,10 @@ PRODUCT_COPY_FILES += \
 # Power
 PRODUCT_PACKAGES += \
     android.hardware.power@1.2-service
+
+#Recorder
+PRODUCT_PACKAGES += \
+    Recorder
 
 # RIL
 PRODUCT_PACKAGES += \
@@ -235,8 +283,8 @@ PRODUCT_PACKAGES += \
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libnl \
-    libqdMetaData
+    libnl 
+
 
 PRODUCT_BOOT_JARS += \
     WfdCommon
