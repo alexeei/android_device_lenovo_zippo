@@ -25,7 +25,7 @@ TARGET_SCREEN_WIDTH := 1080
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage \
-    vendor/lineage/overlay/fod  
+    vendor/addons/overlay-fod  
 
     
 
@@ -155,7 +155,7 @@ PRODUCT_PACKAGES += \
     lineage.biometrics.fingerprint.inscreen@1.0-service.lenovo
     
 TARGET_HAS_FOD := true   
-TARGET_USES_FOD_HACK := true 
+#TARGET_USES_FOD_HACK := true 
 
 EXTRA_FOD_ANIMATIONS := true
 
