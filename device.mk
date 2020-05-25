@@ -25,8 +25,8 @@ TARGET_SCREEN_WIDTH := 1080
 DEVICE_PACKAGE_OVERLAYS += \
     $(LOCAL_PATH)/overlay \
     $(LOCAL_PATH)/overlay-lineage \
-    vendor/lineage/overlay/fod  \
-    vendor/addons/overlay-fod
+    vendor/lineage/overlay/fod  
+
     
 
 # Properties
