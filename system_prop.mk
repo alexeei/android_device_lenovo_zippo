@@ -144,10 +144,8 @@ ro.surface_flinger.use_color_management=true  \
 ro.surface_flinger.wcg_composition_dataspace=143261696
 
 
-
-
 # Set lmkd options
-PRODUCT_PRODUCT_PROPERTIES += \
+PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram = false \
     ro.lmk.kill_heaviest_task = true \
     ro.lmk.kill_timeout_ms = 100 \
@@ -156,16 +154,17 @@ PRODUCT_PRODUCT_PROPERTIES += \
     
 # USB debugging
 PRODUCT_PROPERTY_OVERRIDES += \
-    persist.sys.usb.config=mtp \
+    persist.sys.usb.config=mtp, adb \
     ro.adb.secure=1 \
     ro.secure=1 
    
 
 # WiFi Display
-PRODUCT_PRODUCT_PROPERTIES += \
+PRODUCT_PROPERTY_OVERRIDES += \
 persist.debug.wfd.enable=1  \
+persist.sys.wfd.nohdcp=1 \
 persist.sys.wfd.virtual=0
 
 #Memplus
-PRODUCT_PRODUCT_PROPERTIES += \
+PRODUCT_PROPERTY_OVERRIDES += \
 persist.vendor.memplus.enable=1
