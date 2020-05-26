@@ -182,6 +182,9 @@ PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/keylayout/slip-cover.kl:system/usr/keylayout/slip-cover.kl
 
 
+# NoCutout
+PRODUCT_PACKAGES += \
+    NoCutoutOverlay
 
 # Face Unlock
 TARGET_FACE_UNLOCK_SUPPORTED := false
