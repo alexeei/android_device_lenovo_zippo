@@ -84,6 +84,7 @@ PRODUCT_PACKAGES += \
     libqcomvoiceprocessing \
     libqcomvoiceprocessingdescriptors \
     libqcompostprocbundle \
+    libaacwrapper \
     tinymix \
     libaudio-resampler \
     libwebrtc_audio_preprocessing \
