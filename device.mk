@@ -123,6 +123,10 @@ PRODUCT_PACKAGES += \
     libqdMetaData \
     libqdMetaData.system \
     libvulkan
+    
+#Doze
+PRODUCT_PACKAGES +=
+CustomDoze
 
 #PRODUCT_PACKAGES += \
   #  android.hardware.graphics.composer@2.3-service \

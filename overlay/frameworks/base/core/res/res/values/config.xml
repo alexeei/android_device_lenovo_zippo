@@ -691,10 +691,7 @@
         <item>gprs:4092,8760,11680,4096,8760,11680</item>
         <item>evdo:4094,87380,524288,4096,16384,262144</item>
     </string-array>
-     
-     <!-- Boolean indicating whether the HWC setColorTransform function can be performed efficiently
-         in hardware. -->
-    <bool name="config_setColorTransformAccelerated">true</bool>
+    
 
     <!-- If this is true, long press on power button will be available from the non-interactive state -->
     <bool name="config_supportLongPressPowerWhenNonInteractive">true</bool>
@@ -773,15 +770,15 @@
         <item>5</item>
         <item>23</item>
         <item>34</item>
-        <item>48</item>
-        <item>60</item>
+        <item>46</item>
+        <item>58</item>
         <item>68</item>
         <item>84</item>
         <item>89</item>
         <item>98</item>
         <item>110</item>
         <item>130</item>
-        <item>153</item>
+        <item>150</item>
         <item>175</item>
         <item>210</item>
         <item>250</item>
@@ -796,11 +793,11 @@
     </array>
 
     <!-- Minimum screen brightness allowed by the power manager. -->
-    <integer name="config_screenBrightnessDim">10</integer>
+    <integer name="config_screenBrightnessDim">8</integer>
 
     <!-- Default screen brightness setting.
          Must be in the range specified by minimum and maximum. -->
-    <integer name="config_screenBrightnessSettingDefault">102</integer>
+    <integer name="config_screenBrightnessSettingDefault">98</integer>
 
     <!-- Default screen brightness for VR setting. Target default value: 0x0BB for EVT1.1. -->
     <!-- 8 bit brightness level of 6 corresponds to the 10 bit brightness level of 0x0B6,
@@ -820,11 +817,6 @@
          The user is forbidden from setting the brightness above this level. -->
     <integer name="config_screenBrightnessSettingMaximum">255</integer>
 
-    <!-- Boolean indicating whether the wifi chipset has background scan support -->
-    <bool translatable="false" name="config_wifi_background_scan_support">true</bool>
-
-    <!-- Wifi driver supports batched scan -->
-    <bool translatable="false" name="config_wifi_batched_scan_supported">true</bool>
 
     <!-- Whether WiFi display is supported by this device.
          There are many prerequisites for this feature to work correctly.
@@ -908,7 +900,7 @@
          For this time after the screen turns on, the Power Manager
          will not debounce light sensor readings -->
 
-    <integer name="config_lightSensorWarmupTime">200</integer>
+    <integer name="config_lightSensorWarmupTime">100</integer>
 
 
     <!-- Whether to enable fused location provider overlay which allows fused
@@ -994,6 +986,8 @@
     <bool name="config_dozePulsePickup">true</bool>
     <bool name="config_dozePulseTilt">true</bool>
     <bool name="config_dozePulseProximity">true</bool>
+    
+    <string name="config_customDozePackage">com.custom.ambient.display/com.custom.ambient.display.DozeSettings</string>
 
      <!-- Smart Charing is available -->
     <bool name="config_smartChargingAvailable">true</bool>
