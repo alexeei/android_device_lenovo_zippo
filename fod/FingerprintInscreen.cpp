@@ -64,7 +64,7 @@ template <typename T>
 static void set(const std::string& path, const T& value) {
     std::ofstream file(path);
     file << value;
-    LOG(INFO) << "wrote path: " << path << ", value: " << value << "\n";
+    
 }
 
 template <typename T>
@@ -109,19 +109,19 @@ Return<void> FingerprintInscreen::onRelease() {
 }
 
 Return<void> FingerprintInscreen::onShowFODView() {
-    acquire_wake_lock(PARTIAL_WAKE_LOCK, LOG_TAG);
+    
     this->mFodCircleVisible = true;
     return Void();
 }
 
 Return<void> FingerprintInscreen::onHideFODView() {
     this->mFodCircleVisible = false;
-    release_wake_lock(LOG_TAG);
+    
     return Void();
 }
 
 Return<bool> FingerprintInscreen::handleAcquired(int32_t acquiredInfo, int32_t vendorCode) {
-    LOG(ERROR) << "acquiredInfo: " << acquiredInfo << ", vendorCode: " << vendorCode << "\n";
+    
     std::lock_guard<std::mutex> _lock(mCallbackLock);
     if (mCallback == nullptr) {
         return false;
@@ -162,7 +162,7 @@ Return<int32_t> FingerprintInscreen::getDimAmount(int32_t)  {
     
 
     double dim = (255 + ((-12.08071) * pow((double)realBrightness, 0.4)));
-    LOG(INFO) << "dimAmount = " << dim;
+    
     return (int32_t)dim;
     
     
@@ -192,7 +192,7 @@ Return<int32_t> FingerprintInscreen::getPositionY() {
 }
 
 Return<int32_t> FingerprintInscreen::getSize() {
-    return 178;
+    return 180;
 }
 
 }  // namespace implementation
