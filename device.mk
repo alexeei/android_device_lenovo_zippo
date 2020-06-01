@@ -120,6 +120,7 @@ PRODUCT_PACKAGES += \
  #   libvulkan
  PRODUCT_PACKAGES += \
     libdisplayconfig \
+    libdisplayconfig.vendor \
     libqdMetaData \
     libqdMetaData.system \
     libvulkan
@@ -281,7 +282,9 @@ PRODUCT_PACKAGES += \
 
 # WiFi Display
 PRODUCT_PACKAGES += \
-    libnl 
+    libnl \
+    libqdMetaData \
+    libqdMetaData.system
 
 
 PRODUCT_BOOT_JARS += \
