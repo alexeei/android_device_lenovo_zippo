@@ -10,7 +10,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
+ 
 <!-- These resources are around just to allow their values to be customized
      for different hardware and product builds.  Do not translate. -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
@@ -1020,6 +1020,8 @@
           available to the system.-->
     <bool name="config_freeformWindowManagement">true</bool>
     
+    <!-- Boolean indicating whether 802.11r Fast BSS Transition is enabled on this platform -->
+    <bool translatable="false" name="config_wifi_fast_bss_transition_enabled">true</bool>
  
 
 
