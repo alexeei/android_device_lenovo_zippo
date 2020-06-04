@@ -22,8 +22,6 @@
 /sys/devices/platform/soc/soc:qcom,dsi-display-primary/msm_fb_ea_enable         u:object_r:sysfs_dm:s0
 
 # Fingerprint
-/sys/devices/platform/soc/soc:qcom,dsi-display-primary/backlight_level                                 u:object_r:sysfs_fod:s0
-/sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_hbm                                         u:object_r:sysfs_fod:s0
 
 # Dolby
 /(vendor|system/vendor)/bin/hw/vendor\.dolby\.hardware\.dms@1\.0-service                     u:object_r:hal_dms_default_exec:s0
