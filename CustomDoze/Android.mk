@@ -11,12 +11,11 @@ LOCAL_CERTIFICATE := platform
 LOCAL_PRIVILEGED_MODULE := true
 LOCAL_PRIVATE_PLATFORM_APIS := true
 
-LOCAL_STATIC_ANDROID_LIBRARIES := \
-    VendorSupport-preference
 
 LOCAL_PROGUARD_FLAG_FILES := proguard.flags
 
 include frameworks/base/packages/SettingsLib/common.mk
+include vendor/support/common.mk
 
 include $(BUILD_PACKAGE)
 
