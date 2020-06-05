@@ -50,6 +50,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610  \
     ro.hardware.vulkan=adreno  \
     vendor.gralloc.disable_ubwc=0  \
+     debug.egl.hw=1 
    
     
 
@@ -129,7 +130,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
 # SurfaceFlinger
 PRODUCT_PROPERTY_OVERRIDES += \
 debug.sf.enable_hwc_vds=1  \
-debug.sf.hw=1  \
 persist.sys.sf.color_saturation=1.0  \
 debug.sf.latch_unsignaled=1  \
 ro.surface_flinger.max_frame_buffer_acquired_buffers=3  \
@@ -148,14 +148,11 @@ ro.surface_flinger.wcg_composition_dataspace=143261696
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.config.low_ram = false \
     ro.lmk.kill_heaviest_task = true \
-    ro.lmk.kill_timeout_ms = 100 \
-    ro.lmk.use_minfree_levels = true \
-    ro.lmk.log_stats = true
+    ro.lmk.kill_timeout_ms = 100 
     
 # USB debugging
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.sys.usb.config=mtp, adb \
-    ro.adb.secure=1 \
     ro.secure=1 
    
 
