@@ -50,7 +50,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
     ro.opengles.version=196610  \
     ro.hardware.vulkan=adreno  \
     vendor.gralloc.disable_ubwc=0  \
-    debug.egl.hw=1   
+   
     
 
 # GPS
