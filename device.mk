@@ -223,7 +223,7 @@ PRODUCT_PACKAGES += \
     libOmxSwVdec \
     libOmxSwVencMpeg4 \
     libOmxVdec \
-    libOmxVenc 
+    libOmxVenc \
     libstagefrighthw
 
 PRODUCT_COPY_FILES += \
