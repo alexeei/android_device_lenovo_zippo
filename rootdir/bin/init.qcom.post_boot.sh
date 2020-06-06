@@ -453,7 +453,7 @@ if [ "$ProductName" == "msmnile" ]; then
       # Enable ZRAM
     write /proc/sys/vm/swappiness 100
     write /sys/block/zram0/comp_algorithm lz4
-    write /sys/block/zram0/disksize 1G
+    write /sys/block/zram0/disksize 1.5G
     write /proc/sys/vm/page-cluster 0
     exec u:r:init:s0 -- /system/bin/mkswap /dev/block/zram0
 else
@@ -4202,9 +4202,9 @@ case "$target" in
 	echo 1 > /sys/devices/system/cpu/cpu7/core_ctl/task_thres
 	
 	#zram
-	lock_value "100" /proc/sys/vm/swappiness
+	lock_value "80" /proc/sys/vm/swappiness
         lock_value "lz4" /sys/block/zram0/comp_algorithm
-        lock_value "2G" /sys/block/zram0/disksize
+        lock_value "1.5G" /sys/block/zram0/disksize
         lock_value "0" /proc/sys/vm/page-cluster
 	
 	# Controls how many more tasks should be eligible to run on gold CPUs
@@ -4221,9 +4221,9 @@ case "$target" in
 	echo 0 > /sys/devices/system/cpu/cpu0/core_ctl/enable
 
 	# Setting b.L scheduler parameters
-	echo 95 95 > /proc/sys/kernel/sched_upmigrate
-	echo 85 85 > /proc/sys/kernel/sched_downmigrate
-	#echo "90 60" > /proc/sys/kernel/sched_downmigrate
+	echo 90 85 > /proc/sys/kernel/sched_upmigrate
+	echo 90 60 > /proc/sys/kernel/sched_downmigrate
+	echo "90 60" > /proc/sys/kernel/sched_downmigrate
 	echo 100 > /proc/sys/kernel/sched_group_upmigrate
 	echo 10 > /proc/sys/kernel/sched_group_downmigrate
 	echo 0 > /proc/sys/kernel/sched_walt_rotate_big_tasks
@@ -4234,10 +4234,12 @@ case "$target" in
     echo "0" > /dev/stune/top-app/schedtune.prefer_idle
 
 	# cpuset parameters
-	echo 0-1 > /dev/cpuset/background/cpus
-	echo 0-2 > /dev/cpuset/system-background/cpus
+	echo 0-3 > /dev/cpuset/background/cpus
+	echo 1-3 > /dev/cpuset/system-background/cpus
         echo 0-3 > /dev/cpuset/restricted/cpus
-	echo 0-3 > /dev/cpuset/foreground/cpus
+	echo 0-3,5 > /dev/cpuset/foreground/cpus
+	echo 0-7 > /dev/cpuset/top-app/cpus
+	echo 0-7 > /dev/cpuset/camera-daemon/cpus
 	
 	# Setup final blkio
     # value for group_idle is us
@@ -4308,51 +4310,30 @@ case "$target" in
     # unify scaling_min_freq, may be override
     echo "300000" > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
     echo "710400" > /sys/devices/system/cpu/cpufreq/policy4/scaling_min_freq
-    echo "825600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
+    echo "710400" > /sys/devices/system/cpu/cpufreq/policy7/scaling_min_freq
 
     # unify scaling_max_freq, may be override
     echo "1785600" > /sys/devices/system/cpu/cpufreq/policy0/scaling_max_freq
-    echo "2419100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
+    echo "2019100" > /sys/devices/system/cpu/cpufreq/policy4/scaling_max_freq
     echo "2419600" > /sys/devices/system/cpu/cpufreq/policy7/scaling_max_freq
 
     # unify group_migrate
 	lock_value "120" /proc/sys/kernel/sched_group_upmigrate
 	lock_value "100" /proc/sys/kernel/sched_group_downmigrate
 
-	# configure governor settings for silver cluster
-	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy0/scaling_governor
-	#echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/up_rate_limit_us
-        #echo 200 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-	#echo 1209600 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/hispeed_freq
-	#echo 300000 > /sys/devices/system/cpu/cpufreq/policy0/scaling_min_freq
-	#echo 1 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/pl
+	
 
-	# configure governor settings for gold cluster
-	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy4/scaling_governor
-	#echo 0 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/up_rate_limit_us
-        #echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-	#echo 1412800 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/hispeed_freq
-	#echo 1 > /sys/devices/system/cpu/cpufreq/policy4/schedutil/pl
-
-	# configure governor settings for gold+ cluster
-	#echo "schedutil" > /sys/devices/system/cpu/cpufreq/policy7/scaling_governor
-	#echo 0 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/up_rate_limit_us
-        #echo 0 > /sys/devices/system/cpu/cpufreq/policy0/schedutil/down_rate_limit_us
-	#echo 1412800 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/hispeed_freq
-	#echo 1 > /sys/devices/system/cpu/cpufreq/policy7/schedutil/pl
-
-	# configure input boost settings
-	# ifndef VENDOR_EDIT
+	
 	# simon.ma@SYSTEM, 2019/5/16, modify for GCE-4271 to make slide smoothly
 	# echo "0:1324800" > /sys/module/cpu_boost/parameters/input_boost_freq
 	# echo 120 > /sys/module/cpu_boost/parameters/input_boost_ms
-	# else VENDOR_EDIT
-	lock_value "0:1017600 " /sys/module/cpu_boost/parameters/input_boost_freq
-    lock_value "100" /sys/module/cpu_boost/parameters/input_boost_ms
+	
+	lock_value "0:1324800 4:0 7:0" /sys/module/cpu_boost/parameters/input_boost_freq
+    lock_value "120" /sys/module/cpu_boost/parameters/input_boost_ms
     lock_value "2" /sys/module/cpu_boost/parameters/sched_boost_on_input
-	# endif VENDOR_EDIT
+	
 
-	# ifdef VENDOR_EDIT
+	
 	# simon.ma@SYSTEM, 2019/5/16, add for GCE-8382 to modify the minfree value of lmk
 	echo "18432,23040,27648,51256,150296,200640" > /sys/module/lowmemorykiller/parameters/minfree
 	# endif VENDOR_EDIT
@@ -4364,7 +4345,7 @@ case "$target" in
   
   # limit the usage of big cluster
     lock_value "1" /sys/devices/system/cpu/cpu4/core_ctl/enable
-    echo "0" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
+    echo "1" > /sys/devices/system/cpu/cpu4/core_ctl/min_cpus
     # task usually doesn't run on cpu7
     lock_value "1" /sys/devices/system/cpu/cpu7/core_ctl/enable
     echo "0" > /sys/devices/system/cpu/cpu7/core_ctl/min_cpus
@@ -4385,8 +4366,7 @@ case "$target" in
         echo 0 > /sys/class/scsi_host/host0/../../../clkscale_enable
         #endif VENDOR_EDIT
 
-        echo 0-3 > /dev/cpuset/background/cpus
-        echo 0-3 > /dev/cpuset/system-background/cpus
+        
 
         # Enable oom_reaper
 	if [ -f /sys/module/lowmemorykiller/parameters/oom_reaper ]; then
@@ -4451,7 +4431,7 @@ case "$target" in
 	    for memlat in $device/*cpu*-lat/devfreq/*cpu*-lat
 	    do
 		echo "mem_latency" > $memlat/governor
-		echo 10 > $memlat/polling_interval
+		echo 8 > $memlat/polling_interval
 		echo 400 > $memlat/mem_latency/ratio_ceil
 	    done
 
