@@ -113,11 +113,11 @@ PRODUCT_PACKAGES += \
     init.qcom.rc
 
 # Display
-#PRODUCT_PACKAGES += \
- #   libtinyxml \
- #   gralloc.msmnile \
- #   hwcomposer.msmnile \
- #   libvulkan
+PRODUCT_PACKAGES += \
+    libtinyxml \
+    gralloc.msmnile \
+    hwcomposer.msmnile \
+    libvulkan
  PRODUCT_PACKAGES += \
     libdisplayconfig \
     libdisplayconfig.vendor \
@@ -127,17 +127,17 @@ PRODUCT_PACKAGES += \
     
 
 
-#PRODUCT_PACKAGES += \
-  #  android.hardware.graphics.composer@2.3-service \
-  #  android.hardware.memtrack@1.0-impl \
-  #  android.hardware.memtrack@1.0-service \
-  #  vendor.qti.hardware.display.allocator-service
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.composer@2.3-service \
+    android.hardware.memtrack@1.0-impl \
+    android.hardware.memtrack@1.0-service \
+    vendor.qti.hardware.display.allocator-service
 
-#PRODUCT_PACKAGES += \
- #   android.hardware.graphics.mapper@2.0-impl-qti-display
+PRODUCT_PACKAGES += \
+    android.hardware.graphics.mapper@2.0-impl-qti-display
 
-#PRODUCT_PACKAGES += \
-  #  vendor.qti.hardware.display.mapper@3.0.vendor
+PRODUCT_PACKAGES += \
+    vendor.qti.hardware.display.mapper@3.0.vendor
 
 
 
@@ -224,7 +224,7 @@ PRODUCT_PACKAGES += \
     libOmxSwVencMpeg4 \
     libOmxVdec \
     libOmxVenc 
- #   libstagefrighthw
+    libstagefrighthw
 
 PRODUCT_COPY_FILES += \
     frameworks/av/media/libstagefright/data/media_codecs_google_audio.xml:$(TARGET_COPY_OUT_VENDOR)/etc/media_codecs_google_audio.xml \
