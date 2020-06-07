@@ -33,7 +33,7 @@
         <Config
             Id="0x00001081" Type="1" Enable="true" Timeout="500" Target="msmnile"
             Resources="0x40C00000, 0, 
-                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
+                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 2000,
                        0x40C18000, 75, 
                        0x40C40000, 127, 
                        0x40C2C000, 3, 
@@ -133,9 +133,18 @@
         <!-- LLCCBW resource opcode, value-->
         <!-- L3 resource opcode, value-->
 
+	<Config
+            Id="0x00001080" Type="1" Enable="true" Target="msmnile"
+            Resources="0x43000000, 0x19, 0x43400000, 0x1F40" />
 
+	<!--Pre-Touch boost-->
+        <!-- CPUBW_MIN_FREQ resource opcode, value-->
 
-	
+        <!-- Type="4", Pre-Touch boost -->
+        <Config
+            Id="0x00001085" Type="4" Enable="true" Timeout="80" Target="msmnile"
+            Resources="0x41800000, 0x31" />
+    <!--END ZUIP-4612-->
 
     <!--Drag boost-->
         <!-- CPUBOOST_MAX_FREQ BIG Core resource opcode, value-->
@@ -150,6 +159,10 @@
         <!-- TOP_APP_CPUSET resource opcode, value-->
         <!-- LLCCBW resource opcode, value-->
         <!-- L3 resource opcode, value-->
+        
+        <Config
+            Id="0x00001087" Type="1" Enable="true" Timeout="0" Target="msmnile"
+            Resources="0x43000000, 0x11, 0x43400000, 0x1F40" />
 
 
 
@@ -163,11 +176,9 @@
         <!-- CPUBOOST_MIN_FREQ PRIME Core resource opcode, value-->
         <!-- Type="", Package Install boost -->
 
-        <Config
+       <Config
             Id="0x00001088" Enable="true" Target="msmnile"
-            Resources="0x40C00000, 1, 
-                       0x40804000, 0xFFF, 0x40804100, 0xFFF, 0x40804200, 0xFFF,
-                       0x40800000, 0xFFF, 0x40800100, 0xFFF, 0x40800200, 0xFFF" />
+            Resources="" />
 
     <!--Rotation latency boost-->
         <!-- SCHEDBOOST resource opcode, value-->
@@ -179,7 +190,9 @@
         <!-- CPUBOOST_MIN_FREQ PRIME Core resource opcode, value-->
         <!-- Type="", Rotation latency boost -->
 
-       
+       <Config
+            Id="0x00001089" Enable="true" Timeout="1500" Target="msmnile"
+            Resources="" />
 
     <!--Rotation animation boost-->
         <!-- CPUBOOST_MIN_FREQ LITTLE Core resource opcode, value-->
@@ -188,6 +201,20 @@
         <!-- LLCCBW resource opcode, value-->
         <!-- L3_MEMLAT_MIN_FREQ resource opcode, value -->
         <!-- Type="", Rotation animation boost -->
+        <Config
+            Id="0x00001090" Enable="true" Timeout="1000" Target="msmnile"
+            Resources="" />
+            
+         <!--Display on Resource -->
+        <!-- Display on resource opcode, value -->
+        <Config
+                Id="0x00001041" Enable="true" Timeout="0" Target="msmnile"
+                Resources="0x40000000, 1" />
+    <!--Display off Resource -->
+        <!-- Display on resource opcode, value -->
+        <Config
+                Id="0x00001040" Enable="true" Timeout="0" Target="msmnile"
+                Resources="0x40000000, 0x0" />
 
   
     </PerfBoost>
