@@ -158,12 +158,16 @@ Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
 }
 
 Return<int32_t> FingerprintInscreen::getDimAmount(int32_t)  {
-    int realBrightness = get(BRIGHTNESS_PATH, 0);
+    int brightness = get(BRIGHTNESS_PATH, 0);
     
 
-    double dim = (255 + ((-12.08071) * pow((double)realBrightness, 0.4)));
-    
-    return (int32_t)dim;
+    float alpha;
+    if (brightness > 62) {
+        alpha = 1.0 - pow(brightness / 255.0 * 430.0 / 600.0, 0.45);
+    } else {
+        alpha = 1.0 - pow(brightness / 200.0, 0.45);
+    }
+    return 255 * alpha;
     
     
 
@@ -192,7 +196,7 @@ Return<int32_t> FingerprintInscreen::getPositionY() {
 }
 
 Return<int32_t> FingerprintInscreen::getSize() {
-    return 180;
+    return 178;
 }
 
 }  // namespace implementation
