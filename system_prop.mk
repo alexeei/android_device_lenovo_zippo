@@ -165,3 +165,6 @@ persist.sys.wfd.virtual=0
 #Memplus
 PRODUCT_PROPERTY_OVERRIDES += \
 persist.vendor.memplus.enable=1
+
+# Zygote preforking
+persist.device_config.runtime_native.usap_pool_enabled=true
