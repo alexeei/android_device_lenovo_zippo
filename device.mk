@@ -103,6 +103,11 @@ PRODUCT_COPY_FILES += \
  vendor.audio.dolby.ds2.enabled=true 
 
 
+#Aptx
+PRODUCT_COPY_FILES += \
+    $(LOCAL_PATH)/bluetooth/libaptX_encoder.so:system/lib64/libaptX_encoder.so \
+     $(LOCAL_PATH)/bluetooth/libaptXHD_encoder.so:system/lib64/libaptXHD_encoder.so
+
 # Camera
 PRODUCT_PACKAGES += \
     Snap
@@ -164,6 +169,10 @@ PRODUCT_PACKAGES += \
     libqcomfm_jni \
     qcom.fmradio
 
+
+# AID/fs configs
+PRODUCT_PACKAGES += \
+    fs_config_files
 
 
 # HIDL
