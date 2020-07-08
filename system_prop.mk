@@ -7,7 +7,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.btstack.connect.peer_earbud=true  \
     persist.vendor.btstack.enable.splita2dp=true \
     persist.bt.enableAptXHD=true \
-    persist.service.btui.use_aptx=1 \
     vendor.qcom.bluetooth.soc=cherokee
 
 
