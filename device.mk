@@ -79,20 +79,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     audio.a2dp.default
 
-PRODUCT_PACKAGES += \
-    libvolumelistener \
-    libqcomvisualizer \
-    libqcomvoiceprocessing \
-    libqcomvoiceprocessingdescriptors \
-    libqcompostprocbundle \
-    libaacwrapper \
-    tinymix \
-    libaudio-resampler \
-    libwebrtc_audio_preprocessing \
-    libalsautils \
-    tinycap \
-    tinyplay \
-    tinypcminfo 
 
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/configs/audio/audio_effects.xml:$(TARGET_COPY_OUT_PRODUCT)/vendor_overlay/$(PRODUCT_TARGET_VNDK_VERSION)/etc/audio_effects.xml \
@@ -280,10 +266,7 @@ PRODUCT_PACKAGES += \
     Recorder
 
 # RIL
-PRODUCT_PACKAGES += \
-    libprotobuf-cpp-full \
-    librmnetctl \
-    libxml2
+
 
 # Telephony
 PRODUCT_PACKAGES += \
