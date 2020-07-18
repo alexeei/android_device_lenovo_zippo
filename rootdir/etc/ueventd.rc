@@ -39,6 +39,12 @@ firmware_directories /vendor/firmware_mnt/image/
 /dev/kgsl-3d0             0666   system     system
 /dev/kgsl-2d0             0666   root       root
 /dev/kgsl-2d1             0666   root       root
+/sys/class/kgsl/kgsl-3d0    pwrscale                 0664    root  system
+/sys/class/kgsl/kgsl-3d0    devfreq/governor         0664    root  system
+/sys/class/kgsl/kgsl-3d0    force_rail_on            0664    root  system
+/sys/class/kgsl/kgsl-3d0    force_bus_on             0664    root  system
+/sys/class/kgsl/kgsl-3d0    force_clk_on             0664    root  system
+/sys/class/kgsl/kgsl-3d0    bus_split                0664    root  system
 /dev/ion                  0664   system     system
 /dev/rtc0                 0660   system     system
 /dev/smd0                 0660   system     system
