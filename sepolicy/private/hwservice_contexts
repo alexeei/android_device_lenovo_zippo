@@ -1,4 +1,1 @@
 vendor.display.color::IDisplayColor      u:object_r:hal_display_color_hwservice:s0
-vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemon u:object_r:hal_fingerprint_hwservice_lenovo:s0
-vendor.goodix.hardware.biometrics.fingerprint::IGoodixFingerprintDaemon u:object_r:hal_fingerprint_hwservice_lenovo:s0
-vendor.lenovo.hardware.fingerprintextension::ILenovoFingerprint u:object_r:hal_fingerprint_hwservice_lenovo:s0
