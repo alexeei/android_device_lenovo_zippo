@@ -37,10 +37,15 @@
 
 #define CMD_FINGERPRINT_EVENT 10
 
+#define FOD_HBM_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/fod_hbm"
+#define FOD_HBM_ON 1
+#define FOD_HBM_OFF 0
+
 #define DC_STATUS_PATH "/sys/devices/platform/soc/soc:qcom,dsi-display-primary/msm_fb_ea_enable"
 #define DC_STATUS_ON 1
 #define DC_STATUS_OFF 0
 
+#define BRIGHTNESS_PATH "/sys/class/backlight/panel0-backlight/brightness"
 
 namespace vendor {
 namespace lineage {
@@ -62,6 +67,14 @@ static void set(const std::string& path, const T& value) {
     
 }
 
+template <typename T>
+static T get(const std::string& path, const T& def) {
+    std::ifstream file(path);
+    T result;
+
+    file >> result;
+    return file.fail() ? def : result;
+}
 
 
 
@@ -80,7 +93,7 @@ Return<void> FingerprintInscreen::onFinishEnroll() {
 }
 
 Return<void> FingerprintInscreen::onPress() {
-    
+    set(FOD_HBM_PATH, FOD_HBM_ON);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 1);
     
 
@@ -88,7 +101,7 @@ Return<void> FingerprintInscreen::onPress() {
 }
 
 Return<void> FingerprintInscreen::onRelease() {
-    
+    set(FOD_HBM_PATH, FOD_HBM_OFF);
     this->mVendorFpService->goodixExtendCommand(CMD_FINGERPRINT_EVENT, 0);
   
 
@@ -145,8 +158,16 @@ Return<void> FingerprintInscreen::setLongPressEnabled(bool) {
 }
 
 Return<int32_t> FingerprintInscreen::getDimAmount(int32_t)  {
+    int brightness = get(BRIGHTNESS_PATH, 0);
     
-    return 0;
+
+    float alpha;
+    if (brightness > 62) {
+        alpha = 1.0 - pow(brightness / 255.0 * 430.0 / 600.0, 0.45);
+    } else {
+        alpha = 1.0 - pow(brightness / 200.0, 0.45);
+    }
+    return 255 * alpha;
     
     
 
